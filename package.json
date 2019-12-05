@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/KeithBonarrigo/nodestockapp/issues"
   },
-  "homepage": "https://github.com/KeithBonarrigo/nodestockapp#readme"
+  "homepage": "https://github.com/KeithBonarrigo/nodestockapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
