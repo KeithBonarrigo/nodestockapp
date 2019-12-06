@@ -3,10 +3,12 @@ const app = express();
 const path = require('path');
 const exphbs  = require('express-handlebars');
 const request = require ('request');
+const bodyParser = require('body-parser');
+
 const PORT = process.env.port || 5000;
 
-function call_api(finishedAPI){
-    request('https://cloud.iexapis.com/stable/stock/fb/quote?token=pk_062031d20883444f9ea74e2610fe2011', { json: true }, (err, res, body) => {
+function call_api(finishedAPI, ticker){
+    request("https://cloud.iexapis.com/stable/stock/" + ticker + "/quote?token=pk_062031d20883444f9ea74e2610fe2011", { json: true }, (err, res, body) => {
         if (err) {return console.log(err);}
         if (res.statusCode === 200){
             //console.log(body);
@@ -22,11 +24,27 @@ function call_api(finishedAPI){
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// use body parser middleware
+app.use(bodyParser.urlencoded({extended: false}));
+
+//set post middleware
+app.engine('post', exphbs());
+app.set('view engine', 'handlebars');
+
 app.get('/', function (req, res) {
     call_api(function(doneAPI){
-        //console.log(doneAPI.companyName);
         res.render( 'home', { stock: doneAPI  } );
     });
+    
+});
+
+app.post('/', function (req, res) {
+    posted_symbol = req.body.symbol;
+    console.log(posted_symbol);
+    call_api(
+        function(doneAPI ){ res.render( 'home', { stock: doneAPI  } )  } , posted_symbol
+    );
+    
 });
 
 const otherstuff = 'this is just some other stuff';
@@ -35,6 +53,7 @@ app.get('/about', function (req, res) {
     res.render( 'about', 
     { stuff: otherstuff }
     );
+    
 });
 
 //set static folder
