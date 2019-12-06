@@ -5,7 +5,7 @@ const exphbs  = require('express-handlebars');
 const request = require ('request');
 const bodyParser = require('body-parser');
 
-const PORT = process.env.port || 8080;
+const PORT = process.env.port || 5000;
 
 function call_api(finishedAPI, ticker){
     request("https://cloud.iexapis.com/stable/stock/" + ticker + "/quote?token=pk_062031d20883444f9ea74e2610fe2011", { json: true }, (err, res, body) => {
